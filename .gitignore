@@ -1,4 +1,18 @@
+# Ignore everything adjacent
 /*
+
+# Track the root gitignore file
 !.gitignore
+
+# Track the project readme
 !README.md
-!recaptcha-click-to-reveal
+
+# Track the composer config
+!composer.json
+
+# Track plugin
+!mws-click-to-reveal/
+
+# Don't track vendor stuff for git project (but do distribute with WP plugin RCs)
+mws-click-to-reveal/vendor
+

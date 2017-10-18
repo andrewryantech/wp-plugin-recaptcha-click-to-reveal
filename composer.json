@@ -1,0 +1,22 @@
+{
+    "name": "modern-web-services/click-to-reveal",
+    "description": "A WordPress plugin to blocks web scrapers harvesting emails by requiring the user to click before revealing the full email address",
+    "type": "wordpress-plugin",
+    "autoload": {
+        "psr-4": {
+            "ModernWebServices\\Plugins\\ClickToReveal\\": "mws-click-to-reveal/src/"
+        }
+    },
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Andy Ryan",
+            "email": "andy@modernwebservices.com.au"
+        }
+    ],
+    "minimum-stability": "stable",
+    "config": {
+        "vendor-dir": "mws-click-to-reveal/vendor"
+    },
+    "require": {}
+}
