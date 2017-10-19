@@ -19,7 +19,9 @@ class CredentialsPage
     const NONCE_NAME     = 'nonce_mws_ctr_credentials';
     const NONCE_ACTION   = 'action_mws_ctr_credentials';
 
+    /** @var Settings */
     private $settings;
+
 
     public function __construct(Settings $settings)
     {
@@ -44,11 +46,11 @@ class CredentialsPage
         $keysUpdated = isset($_GET['updated']) && 'true' === $_GET['updated'];
         $displayForm = isset($_GET['action']) && 'setup' === $_GET['action'];
         $wasInvalid  = isset($_GET['message']) && 'invalid' === $_GET['message'];
-
+        $nonceError  = isset($_GET['message']) && 'nonce' === $_GET['message'];
 
         /** @noinspection PhpUnusedLocalVariableInspection */
         $templateData = $displayForm
-            ? $this->generateTemplateDataForInput($wasInvalid)
+            ? $this->generateTemplateDataForInput($wasInvalid, $nonceError)
             : $this->generateTemplateDataForDisplay($keysUpdated);
 
         include __DIR__ . '/../../templates/admin/recaptcha_credentials.php';
@@ -70,22 +72,30 @@ class CredentialsPage
             return;
         }
 
+        // Redirect back to display
+        $slug = self::PAGE_SLUG;
+
+        if(!$this->isValidNonce()){
+            wp_redirect(get_admin_url() . "admin.php?page={$slug}&action=setup&message=nonce");
+            return;
+        }
+
         $siteKey   = trim($_POST['sitekey'] ?? '');
         $secretKey = trim($_POST['secret'] ?? '');
 
         // Save attempt, and no errors ?
-        $isValid = $this->validateKeys($siteKey, $secretKey);
-
-        // Redirect back to display
-        $slug = self::PAGE_SLUG;
-
-        if($isValid) {
+        if($this->validateSubmittedKeys($siteKey, $secretKey)) {
             $this->settings->setSiteKey($siteKey);
             $this->settings->setSecretKey($secretKey);
             wp_redirect(get_admin_url() . "admin.php?page={$slug}&updated=true");
         } else {
             wp_redirect(get_admin_url() . "admin.php?page={$slug}&action=setup&message=invalid");
         }
+    }
+
+    private function isValidNonce(): bool
+    {
+        return isset($_POST[self::NONCE_NAME]) && 1 === wp_verify_nonce($_POST[self::NONCE_NAME], self::NONCE_ACTION);
     }
 
     private function isCredentialsPage(): bool
@@ -99,7 +109,7 @@ class CredentialsPage
         return isset($_POST['action']) && $_POST['action'] === 'update';
     }
 
-    private function validateKeys(string $siteKey, string $secret): bool
+    private function validateSubmittedKeys(string $siteKey, string $secret): bool
     {
         // Cannot have one empty and one present
         return (bool)strlen($siteKey) === (bool)strlen($secret);
@@ -120,18 +130,20 @@ class CredentialsPage
             'mode'            => self::MODE_DISPLAY,
             'keysUpdated'     => $keysUpdated,
             'wasInvalid'      => false,
+            'nonceError'      => false,
             'siteKey'         => $this->settings->getSiteKey(),
             'maskedSecretKey' => $mask . substr($secretKey, -$visibleLength),
         ];
     }
 
 
-    private function generateTemplateDataForInput(bool $wasInvalid): array
+    private function generateTemplateDataForInput(bool $wasInvalid, bool $nonceError): array
     {
         return [
             'mode'        => self::MODE_INPUT,
             'keysUpdated' => false,
             'wasInvalid'  => $wasInvalid,
+            'nonceError'  => $nonceError,
             'nonceName'   => self::NONCE_NAME,
             'nonceAction' => self::NONCE_ACTION,
         ];

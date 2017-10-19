@@ -4,6 +4,7 @@
  * @var int      $mode               Are we displaying reCaptcha credentials, or inputting them?
  * @var bool     $keysUpdated
  * @var bool     $wasInvalid
+ * @var bool     $nonceError
  */
 declare(strict_types=1);
 
@@ -23,6 +24,10 @@ extract($templateData, EXTR_OVERWRITE);
 
     <?php if($wasInvalid) : ?>
       <div class="error"><p><strong>ERROR:</strong> You must supply both keys, or clear both keys.</p></div>
+    <?php endif; ?>
+
+    <?php if($nonceError) : ?>
+      <div class="error"><p><strong>ERROR:</strong> Invalid nonce. Please try again</p></div>
     <?php endif; ?>
 
 
