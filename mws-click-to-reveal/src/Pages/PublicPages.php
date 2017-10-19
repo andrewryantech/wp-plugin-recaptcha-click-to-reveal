@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace ModernWebServices\Plugins\ClickToReveal\Pages;
 
+use ModernWebServices\Plugins\ClickToReveal\Controller;
 use ModernWebServices\Plugins\ClickToReveal\ShortCodes;
 
 /**
@@ -24,12 +25,9 @@ class PublicPages
         if($this->isPageUsingShortcode()) {
             wp_enqueue_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=explicit');
             wp_enqueue_script('mws-click-to-reveal', plugin_dir_url(__FILE__) . '/../../js/public/jquery.click-to-reveal.js', ['jquery', 'google-recaptcha']);
-            ?>
-                <script src="https://use.fontawesome.com/0d35695dc1.js"></script>
-            <?php
+            wp_enqueue_style(Controller::STYLE_FONT_AWESOME, Controller::FONT_AWESOME_URL, [], Controller::VERSION, 'screen');
         }
     }
-
 
     private function isPageUsingShortcode(): bool
     {

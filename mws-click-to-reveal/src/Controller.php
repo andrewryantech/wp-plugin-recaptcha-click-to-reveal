@@ -12,6 +12,10 @@ use ModernWebServices\Plugins\ClickToReveal\Pages;
 class Controller
 {
     const VERSION        = '1.0.0';
+    const PLUGIN_NAME    = 'click_to_reveal';
+
+    const FONT_AWESOME_URL   = 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css';
+    const STYLE_FONT_AWESOME = 'font-awesome';
 
     /** @var string */
     private $pluginFile;
@@ -35,10 +39,66 @@ class Controller
             $this->registerAdminPages();
             $this->modifyPluginsPageEntry();
             $this->registerHooks();
+            add_action('init', [$this, 'addTinyMceButtonsToEditor']);
         } else {
             $this->registerPublicPages();
             add_action('init', [$this, 'check_protected_value_lookup']);
         }
+    }
+
+
+    public function addTinyMceButtonsToEditor(): void
+    {
+        if ( isset($_GET['action'])  && 'edit' === $_GET['action']){
+            // Setup editor with extra button
+            add_filter( 'mce_buttons', [$this, 'register_tiny_mce_buttons'] );
+            add_filter( 'mce_external_plugins', [$this, 'register_tiny_mce_javascript'] );
+            wp_enqueue_style(self::STYLE_FONT_AWESOME, self::FONT_AWESOME_URL, [], self::VERSION, 'screen');
+
+            // Dump the names of all available buttons into page
+            add_action('admin_head', [$this, 'list_protected_value_names']);
+        }
+    }
+
+    public function list_protected_value_names(): void
+    {
+        $results = [];
+        foreach(array_keys($this->settings->getProtectedValues()) as $name){
+            $object = new \stdClass();
+            $object->text = $name;
+            $object->value = $name;
+            $results[] = $object;
+        }
+        $allNames = json_encode($results);
+
+        /** @noinspection UnknownInspectionInspection */
+        /** @noinspection JSUnusedLocalSymbols */
+        echo "<script>var mws_ctr_protected_value_names = $allNames;</script>";
+    }
+
+    /**
+     * Add Short-code Generator button to Tiny MCE
+     *
+     * @param array $buttons
+     * @return array
+     */
+    public function register_tiny_mce_buttons( array $buttons ): array
+    {
+        $buttons[] = self::PLUGIN_NAME;
+        return $buttons;
+    }
+
+    /**
+     * Add Tiny MCE JS plugin
+     *
+     * @since 1.0.0
+     * @param array $plugin_array
+     * @return array
+     */
+    public function register_tiny_mce_javascript( array $plugin_array ): array
+    {
+        $plugin_array[self::PLUGIN_NAME] = plugins_url( '/src/js/admin/tinymce-plugin.js', __DIR__ );
+        return $plugin_array;
     }
 
 
