@@ -55,7 +55,7 @@ class ProtectedValuesPage
         // Include scripts
         wp_enqueue_script(
             'mws-click-to-reveal-options',
-            plugin_dir_url(__FILE__) . '/../../../js/protected-values.js',
+            plugin_dir_url(__FILE__) . '/../../../js/admin/protected-values.js',
             ['jquery'],
             ClickToReveal\Controller::VERSION
         );

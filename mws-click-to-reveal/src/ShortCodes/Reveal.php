@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace ModernWebServices\Plugins\ClickToReveal\ShortCodes;
 
-use ModernWebServices\Plugins\ClickToReveal\Pages\OptionsPage;
 use ModernWebServices\Plugins\ClickToReveal\Settings;
 
 class Reveal
@@ -18,12 +17,18 @@ class Reveal
     const FORMAT_DEFAULT = 'default';
     const FORMAT_EMAIL = 'email';
 
+
+
     const FORMATS = [
         self::FORMAT_DEFAULT,
         self::FORMAT_EMAIL,
     ];
 
     private $settings;
+
+    private static $nextId = 1;
+
+
 
 
     public function __construct(Settings $settings)
@@ -47,9 +52,18 @@ class Reveal
             }
             return '';
         }
+
         $name   = $atts['name'];
         $title  = $atts['title'] ?? 'Click to reveal';
         $format = $atts['format'] ?? self::FORMAT_DEFAULT;
+
+        // Ensure protected value actually exists
+        if(!$this->settings->hasProtectedValue($name)){
+            if(WP_DEBUG){
+                trigger_error(sprintf("No protected value registered with name '%s'", $name));
+            }
+            return '';
+        }
 
         $siteKey = $this->settings->getSiteKey();
 
@@ -69,17 +83,70 @@ class Reveal
      */
     public function render(string $format, string $name, string $public, string $title, string $siteKey): string
     {
+        $eType = $this->getElementType($format);
 
+        if(!$eType){
+            return '';
+        }
+
+        $id              = 'google_re_captcha_' . self::$nextId++;
+        $selector        = "[data-recaptcha-id=$id][data-vendor=modern-web-services][data-plugin=click-to-reveal]";
+        $extraAttributes = $this->getExtraAttributes($format);
+
+        return  <<<EOD
+                    <div class="g-recaptcha" data-sitekey="$siteKey" data-size="invisible" id="$id"></div>
+                    <$eType
+                        $extraAttributes
+                        data-recaptcha-id="$id"
+                        data-vendor="modern-web-services"
+                        data-plugin="click-to-reveal"
+                        data-format="$format"
+                        data-name="$name"
+                        title="$title">$public<span
+                            data-spinner
+                            style="display:none;"><i 
+                                class="fa fa-refresh fa-spin fa-fw"></i
+                            ><span class="sr-only">Loading...</span
+                        ></span
+                    ></$eType>
+                
+                    <script type="text/javascript">
+                        jQuery(function() {
+                            jQuery('$selector').mwsClickToReveal({});
+                        });
+                    </script>
+EOD;
+    }
+
+
+    private function getElementType(string $format): string
+    {
         switch($format){
             case self::FORMAT_DEFAULT:
-//                return '<button class="g-recaptcha" data-sitekey="'.$siteKey.'" data-callback="xxCallback" data-click-to-reveal="'.$name.'" title="'.$title.'">'.$public.'</button>';
-                return '<span class="g-recaptcha" data-sitekey="'.$siteKey.'" data-callback="xxCallback" data-click-to-reveal="'.$name.'" title="'.$title.'">'.$public.'</span>';
+                return 'span';
             case self::FORMAT_EMAIL:
-                return '<a class="g-recaptcha" data-sitekey="'.$siteKey.'" data-callback="xxCallback" href="#" data-click-to-reveal="'.$name.'" title="'.$title.'"><span>'.$public.'</span></a>';
+                return 'a';
+            default:
+                if(WP_DEBUG){
+                    trigger_error("Unrecognised shortcode format: '{$format}'");
+                }
+                return '';
         }
-        if(WP_DEBUG){
-            trigger_error("Unrecognised shortcode format: '{$format}'");
+    }
+
+
+    private function getExtraAttributes(string $format): string
+    {
+        switch($format){
+            case self::FORMAT_DEFAULT:
+                return '';
+            case self::FORMAT_EMAIL:
+                return 'href="#"';
+            default:
+                if(WP_DEBUG){
+                    trigger_error("Unrecognised shortcode format: '{$format}'");
+                }
+                return '';
         }
-        return '';
     }
 }

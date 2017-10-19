@@ -17,25 +17,19 @@ class PublicPages
     public function __construct()
     {
         add_action('wp_head', [$this, 'wp_head']);
-        add_action('init', [$this, 'enqueue_public_scripts']);
     }
 
     public function wp_head(): void
     {
         if($this->isPageUsingShortcode()) {
-            wp_enqueue_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js');
+            wp_enqueue_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=explicit');
+            wp_enqueue_script('mws-click-to-reveal', plugin_dir_url(__FILE__) . '/../../js/public/jquery.click-to-reveal.js', ['jquery', 'google-recaptcha']);
+            ?>
+                <script src="https://use.fontawesome.com/0d35695dc1.js"></script>
+            <?php
         }
     }
 
-    public function enqueue_public_scripts(): void
-    {
-        if($this->isPageUsingShortcode()) {
-            wp_enqueue_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js');
-        }
-
-        // Include scripts
-        wp_enqueue_script('mws-click-to-reveal', plugin_dir_url(__FILE__) . 'js/test.js', ['jquery', 'google-recaptcha']);
-    }
 
     private function isPageUsingShortcode(): bool
     {

@@ -42,6 +42,11 @@ class Settings
         $this->config = get_option(self::SETTINGS_KEY, []);
     }
 
+    public function deleteAll(): bool
+    {
+        return delete_option(self::SETTINGS_KEY);
+    }
+
 
     public function getSiteKey(): string
     {
@@ -72,6 +77,16 @@ class Settings
         return $this->get(self::KEY_PROTECTED_VALUES, $defaults);
     }
 
+    public function setProtectedValues(array $protectedValues): bool
+    {
+        return $this->set(self::KEY_PROTECTED_VALUES, $protectedValues);
+    }
+
+    public function hasProtectedValue(string $name): bool
+    {
+        return array_key_exists($name, $this->getProtectedValues());
+    }
+
 
     public function getProtectedValue(string $name): string
     {
@@ -83,10 +98,7 @@ class Settings
     }
 
 
-    public function setProtectedValues(array $protectedValues): bool
-    {
-        return $this->set(self::KEY_PROTECTED_VALUES, $protectedValues);
-    }
+
 
 
     public function getDeleteOnUninstall(): bool

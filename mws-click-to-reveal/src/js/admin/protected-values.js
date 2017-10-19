@@ -3,6 +3,8 @@
  */
 (function ($, undefined) {
 
+
+
     $(function () {
         var nextIndex = -1,
             $table = $('#protected_values'),
