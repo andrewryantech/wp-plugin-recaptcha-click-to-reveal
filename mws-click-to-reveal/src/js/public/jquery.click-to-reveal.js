@@ -100,6 +100,7 @@
                     plugin.element.off('click.reveal');
                     plugin.element.removeAttr('title');
                     plugin.element.removeClass(plugin.options.classInProgress);
+                    plugin.captcha.fadeOut();
                 }
             });
         }
