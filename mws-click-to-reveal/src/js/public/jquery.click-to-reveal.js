@@ -17,10 +17,12 @@
      * @constructor
      */
     function MwsClickToReveal(element, options) {
-        var plugin         = this;
-            plugin.element = $(element);
-            plugin.options = $.extend(true, {}, defaults, options);
-            plugin.spinner = $(plugin.element.find('[data-spinner]'));
+        var plugin          = this;
+            plugin.widgetId = null;
+            plugin.element  = $(element);
+            plugin.captcha  = $('#' + plugin.element.attr('data-recaptcha-id'));
+            plugin.options  = $.extend(true, {}, defaults, options);
+            plugin.spinner  = $(plugin.element.find('[data-spinner]'));
 
 
         // install listeners
@@ -29,11 +31,16 @@
             updateHTML('Generating token...', true);
             plugin.element.addClass(plugin.options.classInProgress);
 
-            /** @var {function} grecaptcha */
-            var id = grecaptcha.render(plugin.element.attr('data-recaptcha-id'), {
-                callback: onGenerateCallback
-            });
-            grecaptcha.execute(id);
+            if(null === plugin.widgetId){
+                /** @var {function} grecaptcha */
+                plugin.widgetId = grecaptcha.render(plugin.captcha.get(0), {
+                    callback: onGenerateCallback
+                });
+            } else {
+                grecaptcha.reset(plugin.widgetId);
+            }
+
+            grecaptcha.execute(plugin.widgetId);
         });
 
 
