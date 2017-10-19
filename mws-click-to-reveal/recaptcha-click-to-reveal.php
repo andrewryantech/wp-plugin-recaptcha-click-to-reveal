@@ -7,17 +7,17 @@
  * registers the activation and deactivation functions, and defines a function
  * that starts the plugin.
  *
- * @link              http://example.com
+ * @link              https://github.com/andrewryantech/wp-plugin-recaptcha-click-to-reveal
  * @since             1.0.0
  * @package           Plugin_Name
  *
  * @wordpress-plugin
  * Plugin Name:       Click-to-reveal Email
- * Plugin URI:        http://example.com/plugin-name-uri/
+ * Plugin URI:        https://github.com/andrewryantech/wp-plugin-recaptcha-click-to-reveal
  * Description:       Blocks web scrapers by requiring users to click on emails to reveal the full address. Authenticates users using Google invisible reCaptcha.
  * Version:           1.0.0
- * Author:            Andrew Ryan - Modern Web Services
- * Author URI:        http://example.com/
+ * Author:            Andy Ryan - Modern Web Services
+ * Author URI:        http://modernwebservices.com.au
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       plugin-name
@@ -25,7 +25,8 @@
  */
 declare(strict_types=1);
 
-use ModernWebServices\Plugins\ClickToReveal;
+use ModernWebServices\Plugins\ClickToReveal\Controller;
+use ModernWebServices\Plugins\ClickToReveal\Settings;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -36,4 +37,4 @@ if ( ! defined( 'WPINC' ) ) {
 require_once __DIR__ . '/vendor/autoload.php';
 
 // Kick things off
-$plugin = new ClickToReveal\Controller(ClickToReveal\Settings::getInstance(), __FILE__);
+$plugin = new Controller(Settings::getInstance(), __FILE__);

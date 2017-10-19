@@ -10,7 +10,7 @@ namespace ModernWebServices\Plugins\ClickToReveal;
 /**
  * Singleton Plugin Settings.
  *
- * Get/Set using public convenience methods. Set saves immediately.
+ * Get/Set using public convenience methods. 'Set' saves immediately.
  */
 class Settings
 {
@@ -94,11 +94,11 @@ class Settings
         if(array_key_exists($name, $protectedValues)) {
             return $protectedValues[$name];
         }
-        throw new \InvalidArgumentException("No hidden value found for $name");
+        if(WP_DEBUG){
+            trigger_error(sprintf("No hidden value found with name: '%s'", $name));
+        }
+        return '';
     }
-
-
-
 
 
     public function getDeleteOnUninstall(): bool

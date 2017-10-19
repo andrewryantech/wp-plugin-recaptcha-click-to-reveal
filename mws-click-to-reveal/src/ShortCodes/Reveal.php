@@ -15,9 +15,7 @@ class Reveal
     const TAG = 'click_to_reveal';
 
     const FORMAT_DEFAULT = 'default';
-    const FORMAT_EMAIL = 'email';
-
-
+    const FORMAT_EMAIL   = 'email';
 
     const FORMATS = [
         self::FORMAT_DEFAULT,
@@ -27,9 +25,6 @@ class Reveal
     private $settings;
 
     private static $nextId = 1;
-
-
-
 
     public function __construct(Settings $settings)
     {
