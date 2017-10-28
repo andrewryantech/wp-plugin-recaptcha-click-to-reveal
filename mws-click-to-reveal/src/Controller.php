@@ -1,6 +1,6 @@
 <?php
 /**
- * Author: andy@modernwebservices.com.au
+ * Author: https://github.com/andrewryantech
  * Created: 30/09/17 2:58 PM
  */
 declare(strict_types=1);
@@ -11,11 +11,14 @@ use ModernWebServices\Plugins\ClickToReveal\Pages;
 
 class Controller
 {
-    const VERSION        = '1.0.0';
-    const PLUGIN_NAME    = 'click_to_reveal';
-
-    const FONT_AWESOME_URL   = 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css';
-    const STYLE_FONT_AWESOME = 'font-awesome';
+    const VERSION              = '1.0.0';
+    const PLUGIN_NAME          = 'click_to_reveal';
+    const FONT_AWESOME_URL     = 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css';
+    const STYLE_FONT_AWESOME   = 'font-awesome';
+    const INITIAL_EXAMPLE_DATA = [
+        'example_private_email'   => 'john@private.com',
+        'example_private_address' => '1 Cherry Tree Lane, New York',
+    ];
 
     /** @var string */
     private $pluginFile;
@@ -69,11 +72,13 @@ class Controller
             $object->value = $name;
             $results[] = $object;
         }
-        $allNames = json_encode($results);
+
+
 
         /** @noinspection UnknownInspectionInspection */
         /** @noinspection JSUnusedLocalSymbols */
-        echo "<script>var mws_ctr_protected_value_names = $allNames;</script>";
+        $script = "<script>var mws_ctr_protected_value_names = [];</script>\n";
+        echo str_replace('[]', json_encode($results), $script);
     }
 
     /**
@@ -188,31 +193,37 @@ class Controller
     }
 
 
+    /**
+     * Registers plugin shortcodes
+     */
     private function register_shortcodes(): void
     {
-        new ShortCodes\Reveal($this->settings);
+        new ShortCode($this->settings);
     }
-
 
 
     /**
      * Called by WP when user activates the plugin
      *
-     * @since 1.0.0
+     * If this is the first time the plugin has been installed, insert example protected values.
      */
-    public function activate()
+    public function activate():void
     {
-//        $postType = new CustomPostType();
-//        $postType->register();
-//        flush_rewrite_rules();
+        if(!$this->settings->getIsInstalled()) {
+            $this->settings->setIsInstalled(true);
+            $this->settings->setProtectedValues(self::INITIAL_EXAMPLE_DATA);
+        }
     }
+
+
     /**
      * Called by WP when user deactivates the plugin
      */
-    public function deactivate()
+    public function deactivate(): void
     {
 //        flush_rewrite_rules();
     }
+
 
     /**
      * Called when user clicks 'Delete' on plugin page

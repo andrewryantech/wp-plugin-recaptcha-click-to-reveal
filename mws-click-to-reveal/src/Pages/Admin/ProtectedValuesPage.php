@@ -1,6 +1,6 @@
 <?php
 /**
- * Author: andy@modernwebservices.com.au
+ * Author: https://github.com/andrewryantech
  * Created: 1/10/17 4:56 PM
  */
 declare(strict_types=1);
@@ -9,6 +9,9 @@ namespace ModernWebServices\Plugins\ClickToReveal\Pages\Admin;
 
 use ModernWebServices\Plugins\ClickToReveal;
 
+/**
+ * Page where admin can manage their protected name/value pairs
+ */
 class ProtectedValuesPage
 {
     const PAGE_SLUG    = 'mws_click_to_reveal';

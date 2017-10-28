@@ -1,15 +1,17 @@
 <?php
 /**
- * Author: andy@modernwebservices.com.au
+ * Author: https://github.com/andrewryantech
  * Created: 17/10/17 11:13 PM
  */
 declare(strict_types=1);
 
 namespace ModernWebServices\Plugins\ClickToReveal\Pages\Admin;
 
-
 use ModernWebServices\Plugins\ClickToReveal\Settings;
 
+/**
+ * The credentials page where admin can manage their Google reCaptcha API keys
+ */
 class CredentialsPage
 {
     const MODE_DISPLAY = 1;  // Displays current credentials, with button to Configure/Reset Keys

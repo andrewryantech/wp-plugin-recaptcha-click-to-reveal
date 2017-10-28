@@ -1,19 +1,16 @@
 <?php
 /**
- * Author: andy@modernwebservices.com.au
+ * Author: https://github.com/andrewryantech
  * Created: 2/10/17 2:22 AM
  */
 declare(strict_types=1);
 
-namespace ModernWebServices\Plugins\ClickToReveal\ShortCodes;
+namespace ModernWebServices\Plugins\ClickToReveal;
 
-use ModernWebServices\Plugins\ClickToReveal\Settings;
-
-class Reveal
+class ShortCode
 {
 
-    const TAG = 'click_to_reveal';
-
+    const TAG            = 'click_to_reveal';
     const FORMAT_DEFAULT = 'default';
     const FORMAT_EMAIL   = 'email';
 
@@ -22,10 +19,18 @@ class Reveal
         self::FORMAT_EMAIL,
     ];
 
+    /** @var Settings  */
     private $settings;
 
+    /** @var int */
     private static $nextId = 1;
 
+
+    /**
+     * ShortCode constructor.
+     *
+     * @param Settings $settings
+     */
     public function __construct(Settings $settings)
     {
         $this->settings = $settings;
@@ -85,8 +90,8 @@ class Reveal
         }
 
         $id              = 'google_re_captcha_' . self::$nextId++;
-        $selector        = "[data-recaptcha-id=$id][data-vendor=modern-web-services][data-plugin=click-to-reveal]";
         $extraAttributes = $this->getExtraAttributes($format);
+        $debug           = WP_DEBUG ? 'data-debug' : '';
 
         return  <<<EOD
                     <div class="g-recaptcha" data-sitekey="$siteKey" data-size="invisible" id="$id"></div>
@@ -95,8 +100,10 @@ class Reveal
                         data-recaptcha-id="$id"
                         data-vendor="modern-web-services"
                         data-plugin="click-to-reveal"
+                        data-autoattach
                         data-format="$format"
                         data-name="$name"
+                        $debug
                         title="$title">$public<span
                             data-spinner
                             style="display:none;"><i 
@@ -104,16 +111,14 @@ class Reveal
                             ><span class="sr-only">Loading...</span
                         ></span
                     ></$eType>
-                
-                    <script type="text/javascript">
-                        jQuery(function() {
-                            jQuery('$selector').mwsClickToReveal({});
-                        });
-                    </script>
 EOD;
     }
 
 
+    /**
+     * @param string $format
+     * @return string
+     */
     private function getElementType(string $format): string
     {
         switch($format){
@@ -130,6 +135,12 @@ EOD;
     }
 
 
+    /**
+     * Generate extra data-attributes for specific formats
+     *
+     * @param string $format
+     * @return string
+     */
     private function getExtraAttributes(string $format): string
     {
         switch($format){

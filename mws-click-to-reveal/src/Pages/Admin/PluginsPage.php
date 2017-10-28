@@ -1,6 +1,6 @@
 <?php
 /**
- * Author: andy@modernwebservices.com.au
+ * Author: https://github.com/andrewryantech
  * Created: 1/10/17 5:44 PM
  */
 declare(strict_types=1);

@@ -8,12 +8,9 @@
  */
 declare(strict_types=1);
 
-
-
 use ModernWebServices\Plugins\ClickToReveal\Pages\Admin\CredentialsPage;
 
 extract($templateData, EXTR_OVERWRITE);
-
 ?>
 <div class="wrap">
     <h1>Integration with Other Services</h1>
@@ -29,7 +26,6 @@ extract($templateData, EXTR_OVERWRITE);
     <?php if($nonceError) : ?>
       <div class="error"><p><strong>ERROR:</strong> Invalid nonce. Please try again</p></div>
     <?php endif; ?>
-
 
 
     <div class="card active" id="recaptcha">

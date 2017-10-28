@@ -1,6 +1,7 @@
 /**
- * Author: andrewryantech@gmail.com
+ * Author: https://github.com/andrewryantech
  * Created: 19/10/17 9:38 PM
+ * @see https://github.com/google/closure-compiler/wiki/Annotating-JavaScript-for-the-Closure-Compiler
  */
 ;(function ($, window, document, undefined) {
 
@@ -12,7 +13,9 @@
         };
 
     /**
-     * @param {dom}    element
+     * Plugin constructor
+     *
+     * @param {dom} element
      * @param {object} options
      * @constructor
      */
@@ -45,7 +48,7 @@
 
 
         /**
-         * Update the elements text, optionally showing a spinner
+         * Update the element's text, optionally showing a spinner
          *
          * @param {string} newText
          * @param {boolean} showSpinner
@@ -58,7 +61,11 @@
             }
         }
 
-
+        /**
+         * Called by Google catpcha on successful catpcha completion.
+         *
+         * @param {string} gRecaptchaResponse
+         */
         function onGenerateCallback(gRecaptchaResponse){
 
             updateHTML('Validating token...', true);
@@ -86,7 +93,7 @@
                         }
                     } else {
                         plugin.element.addClass(plugin.options.classFailure);
-                        if(response.message){
+                        if(response.message && plugin.element.is('[data-debug]')){
                             console.log(response.message);
                         }
                         updateHTML('Authorisation failure', false);
@@ -115,3 +122,15 @@
         });
     }
 })(jQuery, window, document);
+
+
+// noinspection JSUnusedGlobalSymbols
+/**
+ * Attach plugin to each 'click-to-reveal' dom element
+ */
+function mwsCtrAutoAttach()
+{
+    jQuery('[data-vendor=modern-web-services][data-plugin=click-to-reveal][data-autoattach]').each(function(idx, elem){
+        jQuery(elem).mwsClickToReveal();
+    })
+}
