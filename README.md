@@ -1,4 +1,4 @@
-# Click-to-reveal. A Google Invisible reCAPTCHA-based wordpress plugin 
-Prevent spam bots scraping your email addresses by requiring users to perform a captcha
+# Click-to-reveal: A Google Invisible reCaptcha-based wordpress plugin 
+Prevent spam bots scraping your email addresses by requiring users to click to reveal protected values.
 
-TODO - This is the GitHub readme (not the wp plugin readme)
+Pending wordpress.org approval...
