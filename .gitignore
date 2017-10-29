@@ -16,3 +16,7 @@
 # Don't track vendor stuff for git project (but do distribute with WP plugin RCs)
 mws-click-to-reveal/vendor
 
+
+!mws-click-to-reveal-svn
+mws-click-to-reveal-svn/*
+!mws-click-to-reveal-svn/assets
