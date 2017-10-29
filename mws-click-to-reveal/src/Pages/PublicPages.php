@@ -32,7 +32,7 @@ class PublicPages
     {
         if($this->isPageUsingShortcode()) {
             // Function for Google captch JS to call when finished loading
-            wp_enqueue_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=explicit&onload=mwsCtrAutoAttach');
+            wp_enqueue_script('mws-ctr-google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=explicit&onload=mwsCtrAutoAttach');
             wp_enqueue_script('mws-click-to-reveal', plugin_dir_url(__FILE__) . '/../../js/public/jquery.click-to-reveal.js', ['jquery', 'google-recaptcha']);
             wp_enqueue_style(Controller::STYLE_FONT_AWESOME, Controller::FONT_AWESOME_URL, [], Controller::VERSION, 'screen');
         }
