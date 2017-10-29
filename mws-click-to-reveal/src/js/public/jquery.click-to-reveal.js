@@ -89,6 +89,9 @@
                             case 'email':
                                 plugin.element.attr('href', 'mailto:' + response.hiddenValue);
                                 break;
+                            case 'phone':
+                                plugin.element.attr('href', 'tel:' + response.hiddenValue);
+                                break;
                             // Other formats can have format-specific logic here
                         }
                     } else {

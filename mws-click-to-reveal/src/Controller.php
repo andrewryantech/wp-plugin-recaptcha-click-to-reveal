@@ -18,6 +18,7 @@ class Controller
     const INITIAL_EXAMPLE_DATA = [
         'example_private_email'   => 'john@private.com',
         'example_private_address' => '1 Cherry Tree Lane, New York',
+        'example_private_phone'   => '415 555 2671',
     ];
 
     /** @var string */

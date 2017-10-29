@@ -30,6 +30,7 @@
                             {type: 'textbox', name: 'placeholder', label: 'Placeholder',  placeholder: ''},
                             {type: 'listbox', name: 'format',      label: 'Format',       values: [
                                 {text: 'Email',   value: 'email', selected: 'selected'},
+                                {text: 'Phone',   value: 'phone', selected: 'selected'},
                                 {text: '(none)',  value: 'default'}
                             ]},
                             {type: 'textbox', name: 'title',       label: 'Title',        placeholder: 'Click to reveal'}

@@ -13,10 +13,12 @@ class ShortCode
     const TAG            = 'click_to_reveal';
     const FORMAT_DEFAULT = 'default';
     const FORMAT_EMAIL   = 'email';
+    const FORMAT_PHONE   = 'phone';
 
     const FORMATS = [
         self::FORMAT_DEFAULT,
         self::FORMAT_EMAIL,
+        self::FORMAT_PHONE,
     ];
 
     /** @var Settings  */
@@ -125,6 +127,7 @@ EOD;
             case self::FORMAT_DEFAULT:
                 return 'span';
             case self::FORMAT_EMAIL:
+            case self::FORMAT_PHONE:
                 return 'a';
             default:
                 if(WP_DEBUG){
@@ -147,6 +150,7 @@ EOD;
             case self::FORMAT_DEFAULT:
                 return '';
             case self::FORMAT_EMAIL:
+            case self::FORMAT_PHONE:
                 return 'href="#"';
             default:
                 if(WP_DEBUG){

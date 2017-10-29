@@ -40,3 +40,11 @@ e.g.
 
 1. Key/Protected-Value management page
 2. TinyMCE editor shortcode integration
+
+== Changelog ==
+
+= 1.0.1 =
+* Add support for telephone numbers
+
+= 1.0.0 =
+* Initial release.

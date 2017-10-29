@@ -14,7 +14,7 @@
  * Plugin Name:       MWS Click-to-reveal
  * Plugin URI:        https://github.com/andrewryantech/wp-plugin-recaptcha-click-to-reveal
  * Description:       Block web scrapers by requiring users to click on emails to reveal the full address. Authenticates users using Google invisible reCaptcha.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            Andy Ryan - Modern Web Services
  * Author URI:        http://modernwebservices.com.au
  * License:           GPL-2.0+
