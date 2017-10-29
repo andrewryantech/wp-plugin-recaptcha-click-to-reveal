@@ -20,12 +20,12 @@
      * @constructor
      */
     function MwsClickToReveal(element, options) {
-        var plugin          = this;
-            plugin.widgetId = null;
-            plugin.element  = $(element);
-            plugin.captcha  = $('#' + plugin.element.attr('data-recaptcha-id'));
-            plugin.options  = $.extend(true, {}, defaults, options);
-            plugin.spinner  = $(plugin.element.find('[data-spinner]'));
+        var plugin      = this;
+        plugin.widgetId = null;
+        plugin.element  = $(element);
+        plugin.captcha  = $('#' + plugin.element.attr('data-recaptcha-id'));
+        plugin.options  = $.extend(true, {}, defaults, options);
+        plugin.spinner  = $(plugin.element.find('[data-spinner]'));
 
 
         // install listeners
@@ -135,24 +135,18 @@
         return plugin.element.is('[data-debug]');
     }
 
-
     $.fn[pluginName] = function (options) {
         return this.each(function () {
             if (!$.data(this, 'plugin_' + pluginName)) {
                 $.data(this, 'plugin_' + pluginName, new MwsClickToReveal(this, options));
             }
         });
-    }
+    };
+
+    // Attach plugin to each 'click-to-reveal' dom element
+    // (note we cannot use onload callback via GET arg because it may conflict with other plugins, eg ContactForm7.
+    // In the case of conflict, only the first registered onload callback is executed.
+    $('[data-vendor=modern-web-services][data-plugin=click-to-reveal][data-autoattach]').each(function(idx, elem){
+        $(elem).mwsClickToReveal();
+    });
 })(jQuery, window, document);
-
-
-// noinspection JSUnusedGlobalSymbols
-/**
- * Attach plugin to each 'click-to-reveal' dom element
- */
-function mwsCtrAutoAttach()
-{
-    jQuery('[data-vendor=modern-web-services][data-plugin=click-to-reveal][data-autoattach]').each(function(idx, elem){
-        jQuery(elem).mwsClickToReveal();
-    })
-}
