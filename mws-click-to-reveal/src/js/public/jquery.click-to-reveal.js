@@ -31,6 +31,15 @@
         // install listeners
         plugin.element.on('click.reveal', function (event) {
             event.preventDefault();
+
+            // Ensure site-key is configured
+            if(!plugin.captcha.attr('data-sitekey')){
+                if(isDebug(plugin)){
+                    console.log('Error - site key has not been configured.');
+                }
+                return;
+            }
+
             updateHTML('Generating token...', true);
             plugin.element.addClass(plugin.options.classInProgress);
 
@@ -96,7 +105,7 @@
                         }
                     } else {
                         plugin.element.addClass(plugin.options.classFailure);
-                        if(response.message && plugin.element.is('[data-debug]')){
+                        if(response.message && isDebug(plugin)){
                             console.log(response.message);
                         }
                         updateHTML('Authorisation failure', false);
@@ -114,6 +123,16 @@
                 }
             });
         }
+    }
+
+    /**
+     * Returns whether the plugin is in debug mode
+     *
+     * @param {MwsClickToReveal} plugin
+     * @return {bool}
+     */
+    function isDebug(plugin) {
+        return plugin.element.is('[data-debug]');
     }
 
 
