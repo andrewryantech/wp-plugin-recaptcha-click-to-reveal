@@ -83,13 +83,18 @@ class ShortCode
      * @param string $siteKey
      * @return string
      */
-    public function render(string $format, string $name, string $public, string $title, string $siteKey): string
+    private function render(string $format, string $name, string $public, string $title, string $siteKey): string
     {
         $eType = $this->getElementType($format);
 
         if(!$eType){
             return '';
         }
+
+        // Ensure the scripts and styles are output to page
+        wp_enqueue_script( 'google-recaptcha' );
+        wp_enqueue_script('mws-click-to-reveal');
+        wp_enqueue_style(Controller::STYLE_FONT_AWESOME);
 
         $id              = 'google_re_captcha_' . self::$nextId++;
         $extraAttributes = $this->getExtraAttributes($format);

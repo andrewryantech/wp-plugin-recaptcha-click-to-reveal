@@ -21,20 +21,23 @@ class PublicPages
      */
     public function __construct()
     {
-        add_action('wp_head', [$this, 'wp_head']);
+        // Defer to enable other plugins (eg ContactForm7) to register with their specific 'onload' query arg
+        add_action('wp_enqueue_scripts', [$this, 'wp_enqueue_scripts'], 1000);
     }
 
 
     /**
      * If page is using shortcode, enqueues requisite scripts and styles.
      */
-    public function wp_head(): void
+    public function wp_enqueue_scripts(): void
     {
         if($this->isPageUsingShortcode()) {
-            // Function for Google captch JS to call when finished loading
-            wp_enqueue_script('mws-ctr-google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=explicit');
-            wp_enqueue_script('mws-click-to-reveal', plugin_dir_url(__FILE__) . '/../../js/public/jquery.click-to-reveal.js', ['jquery', 'mws-google-recaptcha']);
-            wp_enqueue_style(Controller::STYLE_FONT_AWESOME, Controller::FONT_AWESOME_URL, [], Controller::VERSION, 'screen');
+            // Don't re-register if another plugin has already done so. The other plugin may rely on an 'onload' arg
+            if ( ! wp_script_is( 'google-recaptcha', 'registered' ) ) {
+                wp_register_script('google-recaptcha', 'https://www.google.com/recaptcha/api.js?render=explicit');
+            }
+            wp_register_script('mws-click-to-reveal', plugin_dir_url(__FILE__) . '../js/public/jquery.click-to-reveal.js', ['jquery', 'google-recaptcha']);
+            wp_register_style(Controller::STYLE_FONT_AWESOME, Controller::FONT_AWESOME_URL, [], Controller::VERSION, 'screen');
         }
     }
 

@@ -143,10 +143,12 @@
         });
     };
 
-    // Attach plugin to each 'click-to-reveal' dom element
-    // (note we cannot use onload callback via GET arg because it may conflict with other plugins, eg ContactForm7.
-    // In the case of conflict, only the first registered onload callback is executed.
-    $('[data-vendor=modern-web-services][data-plugin=click-to-reveal][data-autoattach]').each(function(idx, elem){
-        $(elem).mwsClickToReveal();
+    $(window).on('load', function(){
+        // Attach plugin to each 'click-to-reveal' dom element
+        // (note we cannot use onload callback via GET arg because it may conflict with other plugins, eg ContactForm7.
+        // In the case of conflict, only the first registered onload callback is executed.
+        $('[data-vendor=modern-web-services][data-plugin=click-to-reveal][data-autoattach]').each(function(idx, elem){
+            $(elem).mwsClickToReveal();
+        });
     });
 })(jQuery, window, document);

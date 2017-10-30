@@ -23,6 +23,7 @@
                 onclick: function() {
 
                     // Open window
+                    // noinspection JSUnusedGlobalSymbols
                     editor.windowManager.open({
                         title: 'Click-to-reveal Protected Value',
                         body: [
@@ -41,7 +42,7 @@
                             var d           = e.data,
                                 format      = ' format="' + d.format + '"',
                                 name        = ' name="' + d.name + '"',
-                                title       = ' title="' + d.title + '"',
+                                title       = d.title ? (' title="' + d.title + '"') : '',
                                 placeholder = d.placeholder;
 
                             var shortcode = '[click_to_reveal' + format + name + title + ']' + placeholder + '[/click_to_reveal]';
