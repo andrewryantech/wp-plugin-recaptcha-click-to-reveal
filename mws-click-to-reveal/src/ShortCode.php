@@ -101,7 +101,7 @@ class ShortCode
         $debug           = WP_DEBUG ? 'data-debug' : '';
 
         return  <<<EOD
-                    <div class="g-recaptcha" data-sitekey="$siteKey" data-size="invisible" id="$id"></div>
+                    <span class="g-recaptcha" data-sitekey="$siteKey" data-size="invisible" id="$id"></span>
                     <$eType
                         $extraAttributes
                         data-recaptcha-id="$id"
@@ -113,7 +113,7 @@ class ShortCode
                         $debug
                         title="$title">$public<span
                             data-spinner
-                            style="display:none;"><i 
+                            style="display:none;"><i
                                 class="fa fa-refresh fa-spin fa-fw"></i
                             ><span class="sr-only">Loading...</span
                         ></span
