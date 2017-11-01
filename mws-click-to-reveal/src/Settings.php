@@ -15,13 +15,13 @@ namespace ModernWebServices\Plugins\ClickToReveal;
 class Settings
 {
 
-    private const SETTINGS_KEY = 'mws_click_to_reveal_settings';
+    const SETTINGS_KEY = 'mws_click_to_reveal_settings';
 
-    private const KEY_SITE_KEY            = 'site_key';
-    private const KEY_SECRET_KEY          = 'secret_key';
-    private const KEY_PROTECTED_VALUES    = 'hidden_values';
-    private const KEY_DELETE_ON_UNINSTALL = 'delete_on_uninstall';
-    private const KEY_IS_INSTALLED        = 'is_installed';
+    const KEY_SITE_KEY            = 'site_key';
+    const KEY_SECRET_KEY          = 'secret_key';
+    const KEY_PROTECTED_VALUES    = 'hidden_values';
+    const KEY_DELETE_ON_UNINSTALL = 'delete_on_uninstall';
+    const KEY_IS_INSTALLED        = 'is_installed';
 
     /**
      * @var static

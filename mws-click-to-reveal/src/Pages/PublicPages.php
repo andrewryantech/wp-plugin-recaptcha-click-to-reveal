@@ -17,12 +17,32 @@ class PublicPages
 {
 
     /**
+     * To test if the footer is using the shortcode, we need to render the sidebars using dynamic_sidebar().
+     * This will filter through 'widget_text'. We can hook to this filter and check if the shortcode detected.
+     * @var bool
+     */
+    private $shortCodeUseDetected = false;
+
+
+    /**
      * PublicPages constructor.
      */
     public function __construct()
     {
         // Defer to enable other plugins (eg ContactForm7) to register with their specific 'onload' query arg
         add_action('wp_enqueue_scripts', [$this, 'wp_enqueue_scripts'], 1000);
+
+        // Enable shortcodes in text widgets
+        add_filter('widget_text',[ $this, 'do_shortcode']);
+    }
+
+    public function do_shortcode($content){
+
+        // Don't re-check if we've already detected the shortcode in a sidebar
+        if(!$this->shortCodeUseDetected){
+            $this->shortCodeUseDetected = has_shortcode($content, ShortCode::TAG);
+        }
+        return do_shortcode($content);
     }
 
 
@@ -49,7 +69,25 @@ class PublicPages
      */
     private function isPageUsingShortcode(): bool
     {
+        // Check post content
         global $post;
-        return is_a($post, 'WP_Post') && has_shortcode($post->post_content, ShortCode::TAG);
+        if(is_a($post, 'WP_Post') && has_shortcode($post->post_content, ShortCode::TAG)){
+            return true;
+        }
+
+        // Check sidebar content
+        global $wp_registered_sidebars;
+
+        // Capture and discard sidebar content. Short-circuit if we find the short-code
+        ob_start();
+        foreach($wp_registered_sidebars as $sideBar){
+            dynamic_sidebar($sideBar['id']);
+            if($this->shortCodeUseDetected){
+                break;
+            }
+        }
+        ob_end_clean();
+
+        return $this->shortCodeUseDetected;
     }
 }
