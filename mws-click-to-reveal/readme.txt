@@ -2,7 +2,7 @@
 
 Contributors: modernwebservices
 Donate link: https://modernwebservices.com.au/donate
-Tags: bitcoin
+Tags: spambot recaptcha
 Requires at least: 4.0
 Tested up to: 4.9
 Stable tag: trunk
